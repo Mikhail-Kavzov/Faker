@@ -31,7 +31,7 @@ namespace FakerTests
             }
             catch
             {
-                Environment.Exit(0);
+                Environment.Exit(1);
             }
         }
 
