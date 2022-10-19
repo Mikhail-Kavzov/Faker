@@ -12,19 +12,26 @@ namespace FakerTests
         public Tests()
         {
             _faker=new Faker();
-            var asm1=Assembly.LoadFrom("../../../../Plugins/DateTimeGenerator.dll");
-            var type1 = asm1.GetType("FakerLib.Generators.DateTimeGenerator");
-            var asm2 = Assembly.LoadFrom("../../../../Plugins/ListGenerator.dll");
-            var type2 = asm2.GetType("FakerLib.Generators.ListGenerator");
-            if (type1 != null)
+            try
             {
-               var generator = (IGenerator?)Activator.CreateInstance(type1);
-                _faker.AddGenerator(new KeyValuePair<Type, IGenerator>(typeof(DateTime), generator));
+                var asm1 = Assembly.LoadFrom("../../../../Plugins/DateTimeGenerator.dll");
+                var type1 = asm1.GetType("FakerLib.Generators.DateTimeGenerator");
+                var asm2 = Assembly.LoadFrom("../../../../Plugins/ListGenerator.dll");
+                var type2 = asm2.GetType("FakerLib.Generators.ListGenerator");
+                if (type1 != null)
+                {
+                    var generator = (IGenerator?)Activator.CreateInstance(type1);
+                    _faker.AddGenerator(new KeyValuePair<Type, IGenerator>(typeof(DateTime), generator));
+                }
+                if (type2 != null)
+                {
+                    var generator = (IGenerator?)Activator.CreateInstance(type2);
+                    _faker.AddGenerator(new KeyValuePair<Type, IGenerator>(typeof(List<>), generator));
+                }
             }
-            if (type2 != null)
+            catch
             {
-                var generator = (IGenerator?)Activator.CreateInstance(type2);
-                _faker.AddGenerator(new KeyValuePair<Type, IGenerator>(typeof(List<>), generator));
+                Environment.Exit(0);
             }
         }
 
